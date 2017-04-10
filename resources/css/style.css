@@ -35,10 +35,6 @@ p {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.card p {
-  margin: 0;
   color: white;
   font-weight: 900;
   font-size: 8rem;

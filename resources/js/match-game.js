@@ -70,7 +70,6 @@ MatchGame.renderCards = function(cardValues, $game) {
   }
 
   $(".card").click(function() {
-    console.log($(this).data("value"));
     MatchGame.flipCard($(this), $game);
   })
 };
@@ -81,11 +80,47 @@ MatchGame.renderCards = function(cardValues, $game) {
  */
 
 MatchGame.flipCard = function($card, $game) {
-  if ($game.data("flippedCards") == $card) {
+  if ($card.data("isFlipped")) {
     return;
   }
+  $game.data("flippedCards").push($card);
+
+  var flippedCards = $game.data("flippedCards");
+
+  $card.data("isFlipped", true);
 
   $card.css('background-color', $card.data("color"));
+  $card.text($card.data("value"));
+
+  if (flippedCards.length === 2) {
+    // we have a match
+
+    console.log(flippedCards[0]);
+    console.log(flippedCards[1]);
+    if (flippedCards[0].data("value") === flippedCards[1].data("value")) {
+      $game.data("flippedCards", []);
+
+      flippedCards[0].css("background-color", "rgb(153, 153, 153)");
+      flippedCards[0].css("border", "4px solid #ffffff");
+
+      flippedCards[1].css("background-color", "rgb(153, 153, 153)");
+      flippedCards[1].css("border", "4px solid #ffffff");
+    }
+    // no match
+    else {
+      setTimeout(function() {
+        flippedCards[0].css("background-color", "");
+        flippedCards[0].text("");
+        flippedCards[0].data("isFlipped", false);
+
+        flippedCards[1].css("background-color", "");
+        flippedCards[1].text("");
+        flippedCards[1].data("isFlipped", false);
+
+        $game.data("flippedCards", []);
+      }, 500);
+    }
+  }
 };
 
 function getRandomIntInclusive(min, max) {
